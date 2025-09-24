@@ -1,13 +1,17 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center mt-5">
-    <div class="col-md-6 col-lg-5">
-        <div class="p-4 border rounded-3 shadow bg-light">
-            <h2 class="mb-4 text-center">Додати категорію</h2>
+<div class="d-flex justify-content-center align-items-start mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="p-4 p-md-5 border rounded-3 bg-body-tertiary shadow">
+            <h2 class="text-center mb-4">Редагування категорії</h2>
 
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="text-danger mb-3">{{ form.non_field_errors }}</div>
+                {% endif %}
 
                 {% for field in form %}
                     <div class="mb-3">
@@ -23,8 +27,8 @@
                 {% endfor %}
 
                 <div class="d-grid gap-2">
-                    <button class="btn btn-success" type="submit">Додати</button>
-                    <a class="btn btn-outline-danger" href="/categories">Скасувати</a>
+                    <button type="submit" class="btn btn-success fs-5">Зберегти</button>
+                    <a href="{% url 'categories:show_categories' %}" class="btn btn-outline-danger fs-5">Скасувати</a>
                 </div>
             </form>
         </div>
