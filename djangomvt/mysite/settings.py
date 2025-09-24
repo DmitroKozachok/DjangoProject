@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os.path
 from pathlib import Path
 
 from django.conf.global_settings import STATICFILES_DIRS
@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'categories'
+     # 'categories',
+    'categories.apps.CategoriesConfig',
 ]
 
 MIDDLEWARE = [
@@ -124,6 +125,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     str(BASE_DIR / 'static')
 ]
+
+IMAGES_URL = '/images/'
+
+IMAGES_ROOT = BASE_DIR / 'images'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

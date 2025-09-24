@@ -28,3 +28,38 @@ py manage.py startapp users
 
 deactivate
 ```
+
+## Clone Project
+```
+.venv\Scripts\activate.bat
+pip freeze
+pip freeze > requirements.txt
+
+git clone https://github.com/novakvova/DjangoPython_P22
+cd DjangoPython_P22
+cd 1.SimpleMVT
+py -m venv .venv
+.venv\Scripts\activate.bat
+
+python.exe -m pip install --upgrade pip
+#py -m pip install Django
+pip install -r requirements.txt
+cd djangomvt
+py manage.py runserver 4892
+```
+
+## Додаємо модель і робимо міграції
+```
+pip install Pillow
+py manage.py makemigrations categories
+py manage.py migrate
+```
+
+## Додаю superuser
+```
+python manage.py createsuperuser
+py manage.py createsuperuser
+admin
+123456
+py manage.py runserver 4892
+```
