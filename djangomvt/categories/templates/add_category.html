@@ -1,6 +1,33 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1 class="text-center">Додати категорію</h1>
-    
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-6 col-lg-5">
+        <div class="p-4 border rounded-3 shadow bg-light">
+            <h1 class="mb-4 text-center">Додати категорію</h1>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success" type="submit">Додати</button>
+                    <a class="btn btn-outline-danger" href="/categories">Скасувати</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
