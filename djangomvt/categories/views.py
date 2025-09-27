@@ -17,8 +17,8 @@ def add_category(request):
         form = CategoryForm()
     return render(request, 'add_category.html', {'form': form})
 
-def edit_category(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+def edit_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
 
     if request.method == 'POST':
         form = CategoryForm(request.POST, request.FILES, instance=category)
@@ -30,8 +30,8 @@ def edit_category(request, pk):
 
     return render(request, 'edit_category.html', {'form': form, 'category': category})
 
-def delete_category(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+def delete_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
 
     if request.method == 'POST':
         if category.image:

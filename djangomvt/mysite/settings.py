@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
      # 'categories',
     'categories.apps.CategoriesConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +130,8 @@ STATICFILES_DIRS = [
 IMAGES_URL = '/images/'
 
 IMAGES_ROOT = BASE_DIR / 'images'
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
