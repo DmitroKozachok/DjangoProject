@@ -1,6 +1,7 @@
 from django import forms
 from .models import CustomUser
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate
 
 class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(
@@ -45,3 +46,34 @@ class CustomUserCreationForm(UserCreationForm):
         if CustomUser.objects.filter(email=email).exists():
             raise forms.ValidationError("Ця електронна пошта вже зареєстрована")
         return email
+    
+class LoginForm(forms.Form):
+    email = forms.EmailField(
+        label="Email", 
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
+    )
+    password = forms.CharField(
+        label="Пароль",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email")
+        password = cleaned_data.get("password")
+
+        if email and password:
+            try:
+                user_obj = CustomUser.objects.get(email=email)
+            except CustomUser.DoesNotExist:
+                raise forms.ValidationError("Некоректний email або пароль")
+
+            user = authenticate(username=user_obj.username, password=password)
+            if user is None:
+                raise forms.ValidationError("Некоректний email або пароль")
+
+            self._user = user
+        return cleaned_data
+
+    def get_user(self):
+        return getattr(self, '_user', None)
