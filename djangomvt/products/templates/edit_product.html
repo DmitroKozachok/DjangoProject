@@ -6,7 +6,7 @@
 <div class="d-flex justify-content-center align-items-center mt-5 mb-3">
     <div class="col-md-7 col-lg-6">
         <div class="p-4 border rounded-3 shadow bg-light">
-            <h2 class="mb-4 text-center">Додати продукт</h2>
+            <h2 class="mb-4 text-center">Редагувати продукт</h2>
 
             <form method="POST" enctype="multipart/form-data" id="product-form">
                 {% csrf_token %}
@@ -34,15 +34,13 @@
                 </div>
 
                 <div class="d-grid gap-2 mt-4">
-                    <button type="submit" class="btn btn-success">Створити продукт</button>
+                    <button type="submit" class="btn btn-success">Зберегти зміни</button>
                     <a class="btn btn-outline-danger" href="/products">Скасувати</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -81,13 +79,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .catch(err => error("Error deleting file"));
             }
-        }
+        },
+        files: [
+            {% for img in product.images.all %}
+            {
+                source: '{{ img.image.url }}',
+                options: {
+                    {% comment %} type: 'local', {% endcomment %}
+                    metadata: { file_id: '{{ img.id }}', priority: {{ img.priority }} }
+                }
+            },
+            {% endfor %}
+        ]
+
+
     });
 
     const form = document.querySelector('#product-form');
     form.addEventListener('submit', function() {
-        
-
         pond.getFiles().forEach((file, index) => {
             const input = document.createElement('input');
             input.type = 'hidden';

@@ -23,9 +23,11 @@
        <td>
           {% with main_image=product.images.all|dictsort:"priority"|first %}
               {% if main_image %}
-                  <img src="{{ main_image.image.url }}" width="80" alt="{{ product.name }}" class="product-img">
+                  {% for item in product.images.all %}
+                    <img width="100px" src="{{ item.image.url }}" alt="{{ product.name }}" class="product-img">
+                  {% endfor %}
               {% else %}
-                  <img src="{% static 'images/no-image.png' %}" width="80" alt="No image" class="product-img">
+                  <img width="100px" src="{% static 'images/no-image.png' %}" alt="No image" class="product-img">
               {% endif %}
           {% endwith %}
       </td>
@@ -34,11 +36,50 @@
       <td class="text-center">{{ product.slug }}</span></td>
       <td class="price">{{ product.price }} ₴</td>
       <td>
-
+        <a href="{% url 'products:edit_product' product.id %}" class="btn btn-sm btn-outline-warning mx-2">Редагувати</a>
+        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{ product.id }}" data-name="{{ product.name }}">Видалити</button>
       </td>
     <tr>
     {% endfor %}
   </tbody>
 </table>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Підтвердження видалення</h5>
+      </div>
+      <div class="modal-body">
+        Ви впевнені, що хочете видалити продукт <strong id="productName"></strong>?
+      </div>
+      <div class="modal-footer">
+        <form id="deleteForm" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Так, видалити</button>
+        </form>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Скасувати</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const deleteModal = document.getElementById('deleteModal');
+    const productNameSpan = document.getElementById('productName');
+    const deleteForm = document.getElementById('deleteForm');
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const productId = button.getAttribute('data-id');
+        const productName = button.getAttribute('data-name');
+
+        productNameSpan.textContent = productName;
+
+        deleteForm.action = "{% url 'products:delete_product' 0 %}".replace("0", productId);
+    });
+});
+</script>
 
 {% endblock %}
